@@ -28,21 +28,13 @@ expect {
 expect -re {[\$#] } {
 		send "df -h;free -m;uptime\n"
 }
-# Add Extra Enter to make a gap between the output
+#Wait for Prompt then run exit command
+expect -re {[\$#] $}
 
-expect -re {[\$#] } {
-		send "\n"
-}
-
-expect -re {[\$#] } {
-		send "exit\n"
-}
+send "exit\n"
 
 expect {
 	"*ogout*"
-#	"*Connection to $ip closed*"
 }
-#expect "*$*"
-#send "exit\n"
 expect eof
 exit 

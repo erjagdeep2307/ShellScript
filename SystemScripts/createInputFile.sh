@@ -19,12 +19,10 @@ if [ ! -f "$INPFILE" ]; then
 	exit 1
 fi
 
-
 while IFS= read -r line; do
   # Capture IP at end of block
   if [[ $line =~ Connection\ to\ ([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\ closed ]]; then
-    
-    max_disk_usage=$(echo $max_disk|cut -d " " -f5,6) 
+     max_disk_usage=$(echo $max_disk|cut -d " " -f5,6) 
     swap_usage=$(echo $swap_line | cut -d " " -f3)
     mem_usage=$(echo $mem_line | cut -d " " -f3)
     echo "$max_disk_usage"
@@ -64,8 +62,6 @@ while IFS= read -r line; do
   if [[ $line == Swap:* ]]; then
     swap_line=$line
   fi
-
-
   # Capture uptime line (heuristic: has "up" and "load average")
   if [[ $line == *"load average"* ]]; then
     uptime_line=$line
