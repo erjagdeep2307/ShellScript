@@ -1,0 +1,48 @@
+# About : This is script written using expect scripting and used to login to each production server.
+#  to find out the use of memory,hdd and load uptime
+# Date: June 12,2025
+
+set ip   [ lindex $argv 0 ]
+set user [ lindex $argv 1 ]
+set passwd [ lindex $argv 2 ]
+set timeout 10
+trap {send_user "\nGoing to exit from expect Script ... \n"; exit } SIGINT
+puts "\n Connecting to the machine $ip for user $user \n"
+spawn  ssh $user@$ip
+#sleep 1
+expect "*No route to host*" {
+	exit -1 
+}
+
+expect {
+	"*(yes/no)*" {
+		send "yes\n"	
+	}
+}
+expect {
+	"*password:*" {
+		send "$passwd\n"
+	}
+}
+
+expect -re {[\$#] } {
+		send "df -h;free -m;uptime\n"
+}
+# Add Extra Enter to make a gap between the output
+
+expect -re {[\$#] } {
+		send "\n"
+}
+
+expect -re {[\$#] } {
+		send "exit\n"
+}
+
+expect {
+	"*ogout*"
+#	"*Connection to $ip closed*"
+}
+#expect "*$*"
+#send "exit\n"
+expect eof
+exit 
